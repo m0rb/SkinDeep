@@ -2914,7 +2914,6 @@ void idMover_Binary::GotoPosition1( void ) {
 	if ( moverState == MOVER_1TO2 ) {
 		// use the physics times because this might be executed during the physics simulation
 		partial = physicsObj.GetLinearEndTime() - physicsObj.GetTime();
-		assert( partial >= 0 );
 		if ( partial < 0 ) {
 			partial = 0;
 		}
@@ -2965,7 +2964,6 @@ void idMover_Binary::GotoPosition2( void ) {
 	if ( moverState == MOVER_2TO1 ) {
 		// use the physics times because this might be executed during the physics simulation
 		partial = physicsObj.GetLinearEndTime() - physicsObj.GetTime();
-		assert( partial >= 0 );
 		if ( partial < 0 ) {
 			partial = 0;
 		}
