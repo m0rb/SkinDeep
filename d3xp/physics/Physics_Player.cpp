@@ -3819,7 +3819,9 @@ idVec3 idPhysics_Player::GetPossibleClamberPos_Ledgecheck(bool backwardsCheck, i
 	if (verticalCheck1.fraction < 1.0f)
 	{
 		verticalCheck1.endpos.z -= pm_crouchheight.GetFloat() * 0.5f;
-		assert((verticalCheck1.endpos.z - current.origin.z) > 0.0f);
+		if ( (verticalCheck1.endpos.z - current.origin.z) <= 0.0f ) {
+			return vec3_zero;
+		}
 	}
 
 	//downward vertical distance we travel.
