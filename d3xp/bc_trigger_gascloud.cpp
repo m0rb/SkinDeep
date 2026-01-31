@@ -1,4 +1,4 @@
-#include "trigger.h"
+#include "Trigger.h"
 #include "Player.h"
 #include "ai/AI.h"
 
@@ -78,7 +78,7 @@ void idTrigger_gascloud::Event_Touch(idEntity* other, trace_t* trace)
 		{
 			//an AI has touched me. After a short delay, start the despawn sequence. We do a delay so the cloud doesn't just immediately disappear.
 			touchedBySomeone = true;
-			maxlifetime = min(gameLocal.time + AI_TOUCH_DESPAWNDELAY, maxlifetime);
+			maxlifetime = Min(gameLocal.time + AI_TOUCH_DESPAWNDELAY, maxlifetime);
 		}
 	}
 
@@ -101,7 +101,7 @@ void idTrigger_gascloud::Event_Touch(idEntity* other, trace_t* trace)
 	{
 		//Start despawning.
 		touchedBySomeone = true;
-		maxlifetime = min(gameLocal.time + AI_TOUCH_DESPAWNDELAY, maxlifetime);
+		maxlifetime = Min(gameLocal.time + AI_TOUCH_DESPAWNDELAY, maxlifetime);
 	}
 }
 

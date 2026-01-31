@@ -164,6 +164,45 @@ void idSysLocal::GetCPUInfo( idStr& outVendor, idStr& outBrand )
 		}
 	}
 	outBrand = brand;
+#elif defined(__unix__)
+	FILE *fp = fopen( "/proc/cpuinfo", "r" );
+	if ( !fp ) {
+		outVendor = "Unknown";
+		outBrand = "Unknown";
+		return;
+	}
+
+	char line[256];
+	bool gotVendor = false, gotBrand = false;
+	while ( fgets( line, sizeof( line ), fp ) ) {
+		if ( !gotVendor && idStr::Cmpn( line, "vendor_id", 9 ) == 0 ) {
+			char *val = strchr( line, ':' );
+			if ( val ) {
+				val++;
+				while ( *val == ' ' ) val++;
+				size_t len = strlen( val );
+				if ( len > 0 && val[len - 1] == '\n' ) val[len - 1] = '\0';
+				outVendor = val;
+				gotVendor = true;
+			}
+		}
+		if ( !gotBrand && idStr::Cmpn( line, "model name", 10 ) == 0 ) {
+			char *val = strchr( line, ':' );
+			if ( val ) {
+				val++;
+				while ( *val == ' ' ) val++;
+				size_t len = strlen( val );
+				if ( len > 0 && val[len - 1] == '\n' ) val[len - 1] = '\0';
+				outBrand = val;
+				gotBrand = true;
+			}
+		}
+		if ( gotVendor && gotBrand ) break;
+	}
+	fclose( fp );
+
+	if ( !gotVendor ) outVendor = "Unknown";
+	if ( !gotBrand ) outBrand = "Unknown";
 #endif
 }
 

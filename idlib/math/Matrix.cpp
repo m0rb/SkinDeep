@@ -26,6 +26,8 @@ If you have questions concerning this license or the applicable additional terms
 ===========================================================================
 */
 
+#include <float.h>
+
 #include "sys/platform.h"
 #include "idlib/containers/List.h"
 #include "idlib/math/Math.h"

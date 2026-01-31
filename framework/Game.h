@@ -75,6 +75,8 @@ typedef enum {
 	ESC_GUI			// set an explicit GUI
 } escReply_t;
 
+class LoadingContext;
+
 class idGame {
 public:
 	virtual						~idGame() {}

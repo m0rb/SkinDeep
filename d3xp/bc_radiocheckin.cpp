@@ -1,10 +1,10 @@
 //#include "script/Script_Thread.h"
 #include "framework/DeclEntityDef.h"
 
-#include "worldspawn.h"
-#include "actor.h"
-#include "mover.h"
-#include "player.h"
+#include "WorldSpawn.h"
+#include "Actor.h"
+#include "Mover.h"
+#include "Player.h"
 #include "bc_meta.h"
 #include "bc_radiocheckin.h"
 
@@ -117,7 +117,7 @@ void idRadioCheckin::StartCheckin(idVec3 _pos)
 
 	//If we 'believe' that only one unit is alive, then exit here. It's weird if one guy just does a radio checkin with themself.
 	int aliveAmount = 0;
-	for (int i = 0; i < min(unitMaxCount, RADIOCHECK_MAX); i++)
+	for (int i = 0; i < Min(unitMaxCount, RADIOCHECK_MAX); i++)
 	{
 		if (aliveKnowledge[i])
 		{
@@ -314,7 +314,7 @@ void idRadioCheckin::DoPlayerFakeCheckin()
 int idRadioCheckin::GetNextAvailableCheckinIndex(int startingIndex)
 {
 	int maxCounter = 0;
-	int startValue = min(startingIndex + 1, unitMaxCount);
+	int startValue = Min(startingIndex + 1, unitMaxCount);
 	for (int i = startValue; i < unitMaxCount; i++)
 	{
 		maxCounter++;

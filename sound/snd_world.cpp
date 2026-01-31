@@ -643,8 +643,7 @@ void idSoundWorldLocal::MixLoop( int current44kHz, int numSpeakers, float *final
 			sprintf(listenerStr, "ListenerEffect: %d (Gain: %f) -- ", listenerEffect, invBlendFactor);
 			sprintf(lerpStr, "LerpEffect: %d (Gain: %f)\n", lerpEffect, lerpBlendFactor);
 
-			OutputDebugString(listenerStr);
-			OutputDebugString(lerpStr);
+			common->DPrintf( "%s%s", listenerStr, lerpStr );
 		}
 		
 

@@ -252,7 +252,8 @@ void SG_DumpStack() {
 }
 #endif
 
-void SG_Warn( const char* fmt, ... ) id_attribute((format(printf,2,3))) {
+void SG_Warn( const char* fmt, ... ) id_attribute((format(printf,2,3)));
+void SG_Warn( const char* fmt, ... ) {
 	va_list args;
 	va_start(args, fmt);
 
@@ -270,7 +271,8 @@ void SG_Warn( const char* fmt, ... ) id_attribute((format(printf,2,3))) {
 	va_end(args);
 }
 
-void SG_Error( const char *fmt, ... ) id_attribute((format(printf,2,3))) {
+void SG_Error( const char *fmt, ... ) id_attribute((format(printf,2,3)));
+void SG_Error( const char *fmt, ... ) {
 	va_list args;
 	va_start(args, fmt);
 
@@ -287,7 +289,8 @@ void SG_Error( const char *fmt, ... ) id_attribute((format(printf,2,3))) {
 }
 
 
-void SG_Print( const char *fmt, ... ) id_attribute((format(printf,2,3))) {
+void SG_Print( const char *fmt, ... ) id_attribute((format(printf,2,3)));
+void SG_Print( const char *fmt, ... ) {
 	va_list args;
 	va_start(args, fmt);
 	gameLocal.Printf(fmt, args);
@@ -1644,7 +1647,7 @@ void idSaveGame::WriteFloatArr( const float * arr, int num ) {
 
 	int size = num * sizeof(float);
 	float * fArr;
-	fArr = (float*)_malloca( size );
+	fArr = (float*)alloca( size );
 	memcpy(fArr, arr, size);
 
 	LittleRevBytes( fArr, sizeof(float), num );

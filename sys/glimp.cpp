@@ -454,7 +454,28 @@ bool GLimp_WindowActive() {
 	auto wnd = GetForegroundWindow();
 	return sdlWindow == wnd;
 #else // this doesn't work atm, sdl isn't getting updated state during transitions
-	return (SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0);
+	return (SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS) != 0;
+#endif
+}
+
+void GLimp_ShowWindow( bool show ) {
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+	if (!window)
+		return;
+	if (show)
+		SDL_ShowWindow(window);
+	else
+		SDL_HideWindow(window);
+#endif
+}
+
+bool GLimp_IsWindowVisible() {
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+	if (!window)
+		return false;
+	return (SDL_GetWindowFlags(window) & SDL_WINDOW_SHOWN) != 0;
+#else
+	return (window != NULL);
 #endif
 }
 

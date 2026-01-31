@@ -388,3 +388,7 @@ void GLimp_SwapBuffers() {};
 void GLimp_ActivateContext() {};
 void GLimp_DeactivateContext() {};
 void GLimp_GrabInput(int flags) {};
+bool GLimp_WindowActive() { return true; };
+void GLimp_ShowWindow( bool show ) {};
+bool GLimp_IsWindowVisible() { return true; };
+void GLimp_ClearFrameBuffers() {};

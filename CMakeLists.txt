@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(dhewm3)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # TODO
 
 # osx: place game .dylib's in the bundle (next to the binary)
@@ -109,7 +112,7 @@ include_directories(${VORBISFILE_INCLUDE_DIR})
 find_package(OpenAL REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIR})
 
-if(NOT AROS)
+if(UNIX AND NOT APPLE AND NOT AROS)
 	find_package(X11 REQUIRED)
 	include_directories(${X11_INCLUDE_DIR})
 endif()
@@ -178,6 +181,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 	add_compile_options(-Wno-switch)
 	add_compile_options(-Wno-format-security)
 
+	# CMAKE_INTDIR is a VS-only concept; define as empty string for GCC/Clang
+	add_definitions(-DCMAKE_INTDIR="")
+
 	CHECK_CXX_COMPILER_FLAG("-Woverloaded-virtual" cxx_has_Woverload_virtual)
 	if(cxx_has_Woverload_virtual)
 		add_compile_options(-Woverloaded-virtual)
@@ -219,6 +225,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
 		set(ldflags "${ldflags} -static-libgcc -static-libstdc++")
 	elseif(os STREQUAL "linux")
 		set(sys_libs ${sys_libs} dl)
+		add_definitions(-DNOSTEAM)
 	endif()
 elseif(MSVC)
 	add_compile_options(/W4)
@@ -328,7 +335,7 @@ set(src_renderer
 	renderer/RenderWorld_load.cpp
 	renderer/RenderWorld_portals.cpp
 	renderer/VertexCache.cpp
-	renderer/draw_arb2.cpp
+	renderer/draw_glsl.cpp
 	renderer/draw_common.cpp
 	renderer/tr_backend.cpp
 	renderer/tr_deform.cpp
@@ -347,6 +354,8 @@ set(src_renderer
 	renderer/tr_trace.cpp
 	renderer/tr_trisurf.cpp
 	renderer/tr_turboshadow.cpp
+	renderer/ShaderGL.cpp
+	renderer/Font.cpp
 )
 
 set(src_framework
@@ -453,6 +462,7 @@ set(src_ui
 	ui/ChoiceWindow.cpp
 	ui/DeviceContext.cpp
 	ui/EditWindow.cpp
+	ui/FeedAlertWindow.cpp
 	ui/FieldWindow.cpp
 	ui/GameBearShootWindow.cpp
 	ui/GameBustOutWindow.cpp
@@ -597,6 +607,173 @@ set(src_d3xp
 	d3xp/physics/Push.cpp
 	d3xp/Grabber.cpp
 	d3xp/physics/Force_Grab.cpp
+	d3xp/EndLevel.cpp
+	d3xp/nullutilities.cpp
+	d3xp/sw_signmap.cpp
+	d3xp/sw_skycontroller.cpp
+	d3xp/bc_acropoint.cpp
+	d3xp/bc_actoricon.cpp
+	d3xp/bc_airlock_accumulator.cpp
+	d3xp/bc_airlock.cpp
+	d3xp/bc_algaeball.cpp
+	d3xp/bc_aloe.cpp
+	d3xp/bc_asteroid.cpp
+	d3xp/bc_baffler.cpp
+	d3xp/bc_banana.cpp
+	d3xp/bc_bananapeel.cpp
+	d3xp/bc_beaconlogic.cpp
+	d3xp/bc_bloodbag.cpp
+	d3xp/bc_bossmonster.cpp
+	d3xp/bc_bossspawnpoint.cpp
+	d3xp/bc_camerasplice.cpp
+	d3xp/bc_carepackage.cpp
+	d3xp/bc_cargohide.cpp
+	d3xp/bc_cassetteplayer.cpp
+	d3xp/bc_cassettetape.cpp
+	d3xp/bc_catcage.cpp
+	d3xp/bc_cat.cpp
+	d3xp/bc_catpod_interior.cpp
+	d3xp/bc_chembomb.cpp
+	d3xp/bc_cryointerior.cpp
+	d3xp/bc_cryospawn.cpp
+	d3xp/bc_damagejet.cpp
+	d3xp/bc_diagnosticbox.cpp
+	d3xp/bc_doorbarricade.cpp
+	d3xp/bc_dozerbot.cpp
+	d3xp/bc_dozerhatch.cpp
+	d3xp/bc_drinkingfountain.cpp
+	d3xp/bc_duper.cpp
+	d3xp/bc_dynatip.cpp
+	d3xp/bc_electricalbox.cpp
+	d3xp/bc_elevatorcable.cpp
+	d3xp/bc_elevatorcable_space.cpp
+	d3xp/bc_emailflag.cpp
+	d3xp/bc_empgrenade.cpp
+	d3xp/bc_enemyspawnpoint.cpp
+	d3xp/bc_engineer.cpp
+	d3xp/bc_envirospawner.cpp
+	d3xp/bc_escapepod.cpp
+	d3xp/bc_exteriorstrut.cpp
+	d3xp/bc_fireattachment.cpp
+	d3xp/bc_fireball.cpp
+	d3xp/bc_flyingbarrel.cpp
+	d3xp/bc_foldingchair.cpp
+	d3xp/bc_food.cpp
+	d3xp/bc_frobcube.cpp
+	d3xp/bc_ftl_charger.cpp
+	d3xp/bc_ftl.cpp
+	d3xp/bc_gameblock.cpp
+	d3xp/bc_glasspiece.cpp
+	d3xp/bc_grabring.cpp
+	d3xp/bc_gunner.cpp
+	d3xp/bc_hackgrenade.cpp
+	d3xp/bc_handdryer.cpp
+	d3xp/bc_handsanitizer.cpp
+	d3xp/bc_hazardpipe.cpp
+	d3xp/bc_healthstation.cpp
+	d3xp/bc_highlighter.cpp
+	d3xp/bc_idletask.cpp
+	d3xp/bc_infomap.cpp
+	d3xp/bc_infoscreen.cpp
+	d3xp/bc_infostation.cpp
+	d3xp/bc_interestpoint.cpp
+	d3xp/bc_itembox.cpp
+	d3xp/bc_jockeybreakable.cpp
+	d3xp/bc_key.cpp
+	d3xp/bc_keypad.cpp
+	d3xp/bc_landmine.cpp
+	d3xp/bc_lever.cpp
+	d3xp/bc_librarian.cpp
+	d3xp/bc_lifeboat_catpod.cpp
+	d3xp/bc_lifeboat.cpp
+	d3xp/bc_lifeboat_scripted.cpp
+	d3xp/bc_lightbulb.cpp
+	d3xp/bc_lighter.cpp
+	d3xp/bc_lostandfound.cpp
+	d3xp/bc_lostandfound_monitor.cpp
+	d3xp/bc_maintpanel.cpp
+	d3xp/bc_manifeststation.cpp
+	d3xp/bc_mech.cpp
+	d3xp/bc_meta.cpp
+	d3xp/bc_moneypile.cpp
+	d3xp/bc_mushroom.cpp
+	d3xp/bc_notewall.cpp
+	d3xp/bc_nudgepoint.cpp
+	d3xp/bc_nutrienttube.cpp
+	d3xp/bc_oxygenbubble.cpp
+	d3xp/bc_oxygenstation.cpp
+	d3xp/bc_pa_control.cpp
+	d3xp/bc_pepperbag.cpp
+	d3xp/bc_pirateship.cpp
+	d3xp/bc_radiocheckin.cpp
+	d3xp/bc_radio.cpp
+	d3xp/bc_radiowall.cpp
+	d3xp/bc_randpackage.cpp
+	d3xp/bc_refinery.cpp
+	d3xp/bc_repairbot.cpp
+	d3xp/bc_repairpatrol.cpp
+	d3xp/bc_sabotagelever.cpp
+	d3xp/bc_sabotagepoint.cpp
+	d3xp/bc_sabotageshutdown.cpp
+	d3xp/bc_savestation.cpp
+	d3xp/bc_searchnode.cpp
+	d3xp/bc_securitystation.cpp
+	d3xp/bc_seekerball.cpp
+	d3xp/bc_seekergrenade.cpp
+	d3xp/bc_shower.cpp
+	d3xp/bc_signalkit.cpp
+	d3xp/bc_signallamp.cpp
+	d3xp/bc_sign_prompt.cpp
+	d3xp/bc_sink.cpp
+	d3xp/bc_skullsaver.cpp
+	d3xp/bc_smokegrenade.cpp
+	d3xp/bc_soap.cpp
+	d3xp/bc_sonar.cpp
+	d3xp/bc_soundspeaker.cpp
+	d3xp/bc_spacemine.cpp
+	d3xp/bc_spearbot.cpp
+	d3xp/bc_spearprojectile.cpp
+	d3xp/bc_spectatenode.cpp
+	d3xp/bc_spectatetimeline.cpp
+	d3xp/bc_stresstester.cpp
+	d3xp/bc_supplystation.cpp
+	d3xp/bc_tablet.cpp
+	d3xp/bc_teleportpuck.cpp
+	d3xp/bc_teletext.cpp
+	d3xp/bc_tnt.cpp
+	d3xp/bc_toilet.cpp
+	d3xp/bc_trashairlock.cpp
+	d3xp/bc_trashchute.cpp
+	d3xp/bc_trashcube.cpp
+	d3xp/bc_trashcuber.cpp
+	d3xp/bc_trashexit.cpp
+	d3xp/bc_trashfish.cpp
+	d3xp/bc_trashfish_hive.cpp
+	d3xp/bc_trigger_confinedarea.cpp
+	d3xp/bc_trigger_deodorant.cpp
+	d3xp/bc_trigger_enginewash.cpp
+	d3xp/bc_trigger_gascloud.cpp
+	d3xp/bc_trigger_healcloud.cpp
+	d3xp/bc_trigger_sneeze.cpp
+	d3xp/bc_turret.cpp
+	d3xp/bc_tutorialprompt.cpp
+	d3xp/bc_tutorialstation.cpp
+	d3xp/bc_upgradecargo.cpp
+	d3xp/bc_vacuumspline.cpp
+	d3xp/bc_vendingmachine.cpp
+	d3xp/bc_ventdoor.cpp
+	d3xp/bc_ventpeek.cpp
+	d3xp/bc_vomanager.cpp
+	d3xp/bc_vrvisor.cpp
+	d3xp/bc_walkietalkie.cpp
+	d3xp/bc_wallitem.cpp
+	d3xp/bc_wallspeaker.cpp
+	d3xp/bc_windowseal.cpp
+	d3xp/bc_windowshutter.cpp
+	d3xp/bc_wiregrenade.cpp
+	d3xp/bc_wrench.cpp
+	d3xp/bc_yarnboard.cpp
+	d3xp/bc_zena.cpp
 )
 
 set(src_core
@@ -610,6 +787,7 @@ set(src_core
 	${src_snd}
 	${src_ui}
 	${src_tools}
+	${src_d3xp}
 )
 
 set(src_stub_openal		sys/stub/openal_stub.cpp)
@@ -725,9 +903,10 @@ if(CORE)
 		${src_sys_core}
 	)
 
-	set_target_properties(${DHEWM3BINARY} PROPERTIES COMPILE_DEFINITIONS "__DOOM_DLL__")
+	set_target_properties(${DHEWM3BINARY} PROPERTIES COMPILE_DEFINITIONS "_D3XP;CTF")
 	set_target_properties(${DHEWM3BINARY} PROPERTIES LINK_FLAGS "${ldflags}")
 	set_target_properties(${DHEWM3BINARY} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/sys/osx/Info.plist)
+	target_include_directories(${DHEWM3BINARY} PRIVATE "${CMAKE_SOURCE_DIR}/d3xp")
 
 	target_link_libraries(${DHEWM3BINARY}
 		idlib
@@ -759,8 +938,9 @@ if(DEDICATED)
 		${src_sys_base}
 	)
 
-	set_target_properties(${DHEWM3BINARY}ded PROPERTIES COMPILE_DEFINITIONS "ID_DEDICATED;__DOOM_DLL__")
+	set_target_properties(${DHEWM3BINARY}ded PROPERTIES COMPILE_DEFINITIONS "ID_DEDICATED;_D3XP;CTF")
 	set_target_properties(${DHEWM3BINARY}ded PROPERTIES LINK_FLAGS "${ldflags}")
+	target_include_directories(${DHEWM3BINARY}ded PRIVATE "${CMAKE_SOURCE_DIR}/d3xp")
 	target_link_libraries(${DHEWM3BINARY}ded
 		idlib
 		${VORBISFILE_LIBRARIES}

@@ -9,7 +9,7 @@
 #include "WorldSpawn.h"
 #include "SmokeParticles.h"
 #include "framework/DeclEntityDef.h"
-#include "trigger.h"
+#include "Trigger.h"
 #include "bc_glasspiece.h"
 
 #include "bc_chembomb.h"
@@ -72,7 +72,7 @@ bool idChembomb::Collide(const trace_t &collision, const idVec3 &velocity)
 	//if (v < 1)
 	//	return false;
 
-	//gameRenderWorld->DrawTextA(idStr::Format("%f", v), GetPhysics()->GetOrigin(), .5f, colorWhite, collision.c.normal.ToMat3(), 1, 3000);
+	//gameRenderWorld->DrawText(idStr::Format("%f", v), GetPhysics()->GetOrigin(), .5f, colorWhite, collision.c.normal.ToMat3(), 1, 3000);
 
 	//gameRenderWorld->DebugArrow(colorGreen, GetPhysics()->GetOrigin(), GetPhysics()->GetOrigin() + (collision.c.normal * DETONATION_OFFSET), 1, 10000);
 

@@ -433,8 +433,10 @@ void idCommonLocal::VPrintf( const char *fmt, va_list args ) {
 
 			logFile = fileSystem->OpenFileWrite(fileName);
 			if (!logFile) {
-				//logFileFailed = true;
-				FatalError("failed to open log file '%s'\n", fileName);
+				recursing = false;
+				Warning("failed to open log file '%s', logging disabled\n", fileName);
+				com_logFile.SetInteger( 0 );
+				return;
 			}
 
 			recursing = false;
@@ -2740,7 +2742,7 @@ void idCommonLocal::InitSIMD( void ) {
 	if (SDL_HasSSE41() == SDL_FALSE)
 	{
 		idStr errorMsg = idStr::Format("Skin Deep requires a CPU that supports SSE4.1 or higher.\n\n- Please ensure your CPU supports SSE4.1 or higher.\n- If your computer has multiple video cards, please ensure it is using its dedicated video card (not the integrated video card).\n\nExiting now.");
-		MessageBox(NULL, errorMsg.c_str(), "Fatal Error", MB_OK | MB_ICONERROR);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Fatal Error", errorMsg.c_str(), NULL);
 		exit(1);
 	}
 

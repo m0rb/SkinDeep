@@ -40,7 +40,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "Misc.h"
 #include "framework/DeclEntityDef.h"
 
-#include "worldspawn.h"
+#include "WorldSpawn.h"
 
 #include "idlib/LangDict.h"
 #include "bc_catcage.h"
@@ -2535,7 +2535,7 @@ void idMoveableItem::Think( void ) {
 		}
 	}
 
-	//gameRenderWorld->DrawTextA(va("%d", (int)health), this->GetPhysics()->GetOrigin() + idVec3(0, 0, 32), .15f, idVec4(1, 1, 1, 1), gameLocal.GetLocalPlayer()->viewAngles.ToMat3());
+	//gameRenderWorld->DrawText(va("%d", (int)health), this->GetPhysics()->GetOrigin() + idVec3(0, 0, 32), .15f, idVec4(1, 1, 1, 1), gameLocal.GetLocalPlayer()->viewAngles.ToMat3());
 	
 	// SW: Dropped items like magazines and tele-pucks will initially have their owner set to the player, to avoid collision issues.
 	// However, leaving them in this state causes havoc with frob traces, so we need to remove the owner once we've been in the world for a bit
@@ -4019,7 +4019,7 @@ void idMoveableItem::JustThrown()
 	// So, to accommodate for this, we cheat the dropTimer somewhat for thrown weapons
 	if (spawnArgs.GetBool("isweapon") && dropTimer == gameLocal.time)
 	{
-		dropTimer = gameLocal.time - max(JUST_SPAWNED_GRACEPERIOD, INTERESTPOINT_DISABLETIME);
+		dropTimer = gameLocal.time - Max(JUST_SPAWNED_GRACEPERIOD, INTERESTPOINT_DISABLETIME);
 	}
 }
 

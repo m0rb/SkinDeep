@@ -1459,7 +1459,7 @@ bool idAI::TestTrajectory( const idVec3 &start, const idVec3 &end, float zVel, f
 					{
 						result = false;
 					}					
-					//gameRenderWorld->DrawTextA(va("%f", distToTarget), trace.endpos, 1.5f, colorWhite, gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1, 10000);
+					//gameRenderWorld->DrawText(va("%f", distToTarget), trace.endpos, 1.5f, colorWhite, gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1, 10000);
 				}
 			}
 

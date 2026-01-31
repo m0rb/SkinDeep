@@ -33,7 +33,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "Player.h"
 #include "bc_acropoint.h"
 #include "Fx.h"
-#include "Worldspawn.h"
+#include "WorldSpawn.h"
 
 #include "physics/Physics_Player.h"
 
@@ -762,7 +762,7 @@ void idPhysics_Player::FlyMove( void ) {
 	{
 		//Player's feet is touching ground.
 		float vel = current.velocity.Length();
-		vel = min(vel, pm_spacespeed.GetInteger()); //BC clamp ground movement speed when in vacuum... for some reason, crouch made it go ultra fast.
+		vel = Min(vel, (float)pm_spacespeed.GetInteger()); //BC clamp ground movement speed when in vacuum... for some reason, crouch made it go ultra fast.
 
 		current.velocity.ProjectOntoPlane(groundTrace.c.normal, OVERCLIP);
 		current.velocity.Normalize();

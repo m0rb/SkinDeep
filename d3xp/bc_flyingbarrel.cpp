@@ -1,7 +1,7 @@
 #include "framework/DeclEntityDef.h"
 
-#include "trigger.h"
-#include "fx.h"
+#include "Trigger.h"
+#include "Fx.h"
 #include "Light.h"
 
 #include "bc_flyingbarrel.h"
@@ -277,7 +277,7 @@ void idFlyingBarrel::Think( void )
 	RunPhysics();
 	TouchTriggers();
 
-	//gameRenderWorld->DrawTextA(idStr::Format("%d", (int)health), this->GetPhysics()->GetOrigin() + idVec3(0, 0, 32), .15f, idVec4(1, 1, 1, 1), gameLocal.GetLocalPlayer()->viewAngles.ToMat3());
+	//gameRenderWorld->DrawText(idStr::Format("%d", (int)health), this->GetPhysics()->GetOrigin() + idVec3(0, 0, 32), .15f, idVec4(1, 1, 1, 1), gameLocal.GetLocalPlayer()->viewAngles.ToMat3());
 
 	if (isSpewingFire)
 	{

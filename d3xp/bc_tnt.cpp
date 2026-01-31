@@ -216,7 +216,7 @@ void idTNT::Think(void)
 			decalSize = 100 + gameLocal.random.RandomInt(50);
 
 			gameLocal.ProjectDecal(explosionPosition, -explosionAngle, 8.0f, true, decalSize, (gameLocal.random.RandomInt(2) % 2 == 0) ? "textures/decals/scorch1024_filled" : "textures/decals/scorch1024_faded");
-			//gameRenderWorld->DrawTextA(idStr::Format("%f", trRay.fraction), trRay.endpos, .3f, colorWhite, -trRay.c.normal.ToMat3(), 1, 30000, true);
+			//gameRenderWorld->DrawText(idStr::Format("%f", trRay.fraction), trRay.endpos, .3f, colorWhite, -trRay.c.normal.ToMat3(), 1, 30000, true);
 		}
 
 
