@@ -29,7 +29,6 @@ jobs:
           mkdir -p skindeep-linux-x64
           cp build/dhewm3 skindeep-linux-x64/
           cp build/d3xp.so skindeep-linux-x64/
-          cp LINUX_PORT.md skindeep-linux-x64/README.md
           tar -czvf skindeep-linux-x64.tar.gz skindeep-linux-x64
       
       - name: Upload Release
