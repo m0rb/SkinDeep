@@ -1,0 +1,38 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build-linux:
+    runs-on: ubuntu-22.04  
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake \
+            libsdl2-dev libopenal-dev libvorbis-dev libogg-dev \
+            libjpeg-dev zlib1g-dev libcurl4-openssl-dev libx11-dev
+      
+      - name: Build
+        run: |
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          make -j$(nproc)
+      
+      - name: Package
+        run: |
+          mkdir -p skindeep-linux-x64
+          cp build/dhewm3 skindeep-linux-x64/
+          cp build/d3xp.so skindeep-linux-x64/
+          cp LINUX_PORT.md skindeep-linux-x64/README.md
+          tar -czvf skindeep-linux-x64.tar.gz skindeep-linux-x64
+      
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: skindeep-linux-x64.tar.gz
