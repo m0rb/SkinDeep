@@ -2063,20 +2063,23 @@ void idMeta::UpdateMetaLKP(bool hasGainedLOS)
 		}
 	}
 
-	if (amountWhoCanSeePlayer > 0)
+	if (lkpEnt)
 	{
-		//At least one AI can see player. Make the LKP invisible.
-		if (!lkpEnt->IsHidden())
+		if (amountWhoCanSeePlayer > 0)
 		{
-			SetLKPVisible(false);
+			//At least one AI can see player. Make the LKP invisible.
+			if (!lkpEnt->IsHidden())
+			{
+				SetLKPVisible(false);
+			}
 		}
-	}
-	else if (amountWhoCanSeePlayer <= 0)
-	{
-		if (lkpEnt->IsHidden() && amountInCombatState > 0)
+		else if (amountWhoCanSeePlayer <= 0)
 		{
-			//Zero AI have LOS to the player. Make the LKP turn on.
-			SetLKPVisible(true);
+			if (lkpEnt->IsHidden() && amountInCombatState > 0)
+			{
+				//Zero AI have LOS to the player. Make the LKP turn on.
+				SetLKPVisible(true);
+			}
 		}
 	}
 

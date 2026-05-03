@@ -1021,7 +1021,7 @@ void idInventory::Clear( void ) {
 	
 	for (int i = 0; i < MAX_HOTBARSLOTS; i++)
 	{
-		ResetHotbarSlot( i );
+		ResetHotbarSlot( i, true ); // skip collision update during Clear() - entities may already be destroyed
 	}
 }
 
@@ -2256,7 +2256,7 @@ void idInventory::SetHotbarSelection( int value )
 	}
 }
 
-void idInventory::ResetHotbarSlot( int hotbarSlot )
+void idInventory::ResetHotbarSlot( int hotbarSlot, bool skipCollisionUpdate )
 {
 	hotbarSlots[hotbarSlot].weaponType = 0; // set to unarmed
 	hotbarSlots[hotbarSlot].clip = -1; // set to -1 so that the gun knows to have a full clip the first time we get it and at the start of the level
@@ -2265,7 +2265,9 @@ void idInventory::ResetHotbarSlot( int hotbarSlot )
 	idEntity * droppedEnt = hotbarSlots[hotbarSlot].carryPtr.GetEntity();
 	hotbarSlots[hotbarSlot].carryPtr = NULL;
 
-	UpdateInventoryCollision(droppedEnt);
+	if ( !skipCollisionUpdate ) {
+		UpdateInventoryCollision(droppedEnt);
+	}
 }
 
 
