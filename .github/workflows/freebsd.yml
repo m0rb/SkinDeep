@@ -20,7 +20,7 @@ jobs:
         with:
           release: "15.0"
           prepare: |
-            pkg install -y cmake pkgconf openal-soft sdl2 libvorbis libogg libjpeg-turbo zlib curl zip
+            pkg install -y cmake pkgconf openal-soft sdl2 libvorbis libogg libjpeg-turbo FreeBSD-zlib-dev curl zip
           run: |
             echo "::group::Configure"
             cmake -B build -DCMAKE_BUILD_TYPE=Release .
