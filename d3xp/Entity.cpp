@@ -7044,7 +7044,7 @@ void idEntity::Event_UpdateDisplayName(char* newName)
 
 void idEntity::Event_SetCurrentHealth(int newHealth)
 {
-	health = min(newHealth, maxHealth);
+	health = Min(newHealth, maxHealth);
 }
 
 void idEntity::Event_SetMaxHealth(int newHealth)

@@ -443,7 +443,7 @@ public:
 	void					SetHotbarSelection(int value = 0);
 private:
 	int						hotbarCurrentlySelected; //What is currently selected.
-	void					ResetHotbarSlot(int hotbarSlot);
+	void					ResetHotbarSlot(int hotbarSlot, bool skipCollisionUpdate = false);
 };
 
 typedef struct {

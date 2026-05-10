@@ -419,6 +419,8 @@ enum slowmoState_t {
 
 //============================================================================
 
+class idTarget_EndLevel;
+
 class idGameLocal : public idGame {
 public:
 	idDict					serverInfo;				// all the tunable parameters, like numclients, etc
@@ -428,6 +430,7 @@ public:
 	idDict					persistentPlayerInfo[MAX_CLIENTS];
 	idEntity *				entities[MAX_GENTITIES];// index to entities
 	int						spawnIds[MAX_GENTITIES];// for use in idEntityPtr
+	idTarget_EndLevel *		endLevel;
 	int						firstFreeIndex;			// first free index in the entities array
 	int						num_entities;			// current number <= MAX_GENTITIES
 	idHashIndex				entityHash;				// hash table to quickly find entities by name

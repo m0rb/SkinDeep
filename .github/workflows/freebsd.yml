@@ -1,0 +1,41 @@
+name: FreeBSD Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-freebsd:
+    runs-on: ubuntu-latest
+    name: FreeBSD (x86_64)
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Build in FreeBSD VM
+        uses: vmactions/freebsd-vm@v1
+        with:
+          release: "15.0"
+          prepare: |
+            pkg install -y cmake pkgconf openal-soft sdl2 libvorbis libogg libjpeg-turbo jpeg-turbo FreeBSD-zlib-dev curl zip
+          run: |
+            echo "::group::Configure"
+            cmake -B build -DCMAKE_BUILD_TYPE=Release .
+            echo "::endgroup::"
+            echo "::group::Build"
+            make -j$(sysctl -n hw.ncpu) -C build
+            echo "::endgroup::"
+            echo "::group::Package"
+            mkdir -p skindeep-freebsd-x64
+            cp build/dhewm3 skindeep-freebsd-x64/
+            cp build/d3xp.so skindeep-freebsd-x64/
+            zip -r skindeep-freebsd-x64.zip skindeep-freebsd-x64
+            echo "::endgroup::"
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: skindeep-freebsd-x64.zip

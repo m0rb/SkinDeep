@@ -5,9 +5,9 @@
 #include "script/Script_Thread.h"
 #include "Fx.h"
 
-#include "player.h"
+#include "Player.h"
 #include "Actor.h"
-#include "ai\AI.h"
+#include "ai/AI.h"
 
 #include "framework/DeclEntityDef.h"
 #include "framework/FileSystem.h"
@@ -1925,7 +1925,7 @@ void idMeta::UpdateEscalationmeter()
 		if (amountWhoCanSeePlayer > 0 && (combatMetastate == COMBATSTATE_COMBAT || combatMetastate == COMBATSTATE_SEARCH))
 		{
 			//Increase the meter.
-			escalationmeterAmount = min(escalationmeterAmount + ESCALATIONMETER_INCREASEDELTA, ESCALATIONMETER_MAX);
+			escalationmeterAmount = Min(escalationmeterAmount + ESCALATIONMETER_INCREASEDELTA, ESCALATIONMETER_MAX);
 
 
 			//if (escalationmeterAmount >= ESCALATIONMETER_MAX)
@@ -1941,7 +1941,7 @@ void idMeta::UpdateEscalationmeter()
 		else if (combatMetastate == COMBATSTATE_IDLE && escalationmeterAmount > 0)
 		{
 			//De-escalate.
-			escalationmeterAmount = max(escalationmeterAmount - ESCALATIONMETER_DECREASEDELTA, 0);
+			escalationmeterAmount = Max(escalationmeterAmount - ESCALATIONMETER_DECREASEDELTA, 0);
 		}
 
 
@@ -2063,20 +2063,23 @@ void idMeta::UpdateMetaLKP(bool hasGainedLOS)
 		}
 	}
 
-	if (amountWhoCanSeePlayer > 0)
+	if (lkpEnt)
 	{
-		//At least one AI can see player. Make the LKP invisible.
-		if (!lkpEnt->IsHidden())
+		if (amountWhoCanSeePlayer > 0)
 		{
-			SetLKPVisible(false);
+			//At least one AI can see player. Make the LKP invisible.
+			if (!lkpEnt->IsHidden())
+			{
+				SetLKPVisible(false);
+			}
 		}
-	}
-	else if (amountWhoCanSeePlayer <= 0)
-	{
-		if (lkpEnt->IsHidden() && amountInCombatState > 0)
+		else if (amountWhoCanSeePlayer <= 0)
 		{
-			//Zero AI have LOS to the player. Make the LKP turn on.
-			SetLKPVisible(true);
+			if (lkpEnt->IsHidden() && amountInCombatState > 0)
+			{
+				//Zero AI have LOS to the player. Make the LKP turn on.
+				SetLKPVisible(true);
+			}
 		}
 	}
 
@@ -2711,7 +2714,7 @@ void idMeta::Event_GetEscalationLevel()
 //This gets called AFTER each FTL jump.
 void idMeta::ResetEscalationLevel()
 {
-	escalationLevel = max(escalationLevel - ESCALATION_MAX, 0);
+	escalationLevel = Max(escalationLevel - ESCALATION_MAX, 0);
 	gameLocal.GetLocalPlayer()->hud->SetStateInt("escalationlevel", escalationLevel);
 
 	//Also, update the next hyperspace jump nav nodes.

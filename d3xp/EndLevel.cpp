@@ -29,6 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "sys/platform.h"
 
 #include "EndLevel.h"
+#include "Game_local.h"
+#include "Player.h"
 
 /*
 
@@ -58,7 +60,7 @@ void idTarget_EndLevel::Spawn( void ) {
 		spawnArgs.GetString( "guiName", "guis/EndLevel.gui", guiName );
 
 		if (guiName.Length()) {
-			gui = idUserInterface::FindGui( guiName, true, false, true );
+			gui = uiManager->FindGui( guiName, true, false, true );
 		}
 	}
 
@@ -127,7 +129,7 @@ void idTarget_EndLevel::Draw() {
 	renderView.y = 0;
 
 	renderView.fov_x = 90;
-	renderView.fov_y = gameLocal.CalcFovY( renderView.fov_x );
+	gameLocal.CalcFov( renderView.fov_x, renderView.fov_x, renderView.fov_y );
 	renderView.time = gameLocal.time;
 
 #if 0

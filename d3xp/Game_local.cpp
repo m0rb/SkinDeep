@@ -53,10 +53,10 @@ If you have questions concerning this license or the applicable additional terms
 #include "bc_ventpeek.h"
 #include "sw_skycontroller.h"
 
-#include "securitycamera.h"
+#include "SecurityCamera.h"
 #include "BrittleFracture.h"
 
-#include "misc.h"
+#include "Misc.h"
 
 #include "bc_infostation.h"
 #include "bc_trigger_deodorant.h"
@@ -292,6 +292,7 @@ void idGameLocal::Clear( void ) {
 	locationEntities = NULL;
 	smokeParticles = NULL;
 	editEntities = NULL;
+	endLevel = nullptr;
 	entityHash.Clear( 1024, MAX_GENTITIES );
 	inCinematic = false;
 	cinematicSkipTime = 0;
@@ -5393,7 +5394,7 @@ void idGameLocal::RadiusPushClipModel( const idVec3 &origin, const float push, c
 		center = clipModel->GetOrigin() + center * clipModel->GetAxis();
 
 		//gameRenderWorld->DebugArrow(colorGreen, center, center + impulse, 4, 10000);
-		//gameRenderWorld->DrawTextA(va("%f %f %f", impulse.x, impulse.y, impulse.z), clipModel->GetOrigin(), .15f, idVec4(1, 1, 1, 1), gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1, 10000);
+		//gameRenderWorld->DrawText(va("%f %f %f", impulse.x, impulse.y, impulse.z), clipModel->GetOrigin(), .15f, idVec4(1, 1, 1, 1), gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1, 10000);
 
 
 		
@@ -6827,7 +6828,7 @@ idEntity* idGameLocal::DoParticleAng(const char* particleName, idVec3 position, 
 			idleSmoke->PostEventMS(&EV_Remove, 5000);
 		}
 
-		idleSmoke->PostEventMS(&EV_Activate, 0, NULL);
+		idleSmoke->PostEventMS(&EV_Activate, 0, (const idEntity *)nullptr);
 		return idleSmoke;
 	}
 
@@ -6862,7 +6863,7 @@ idEntity * idGameLocal::DoParticle(const char *particleName, idVec3 position, id
 			idleSmoke->PostEventMS(&EV_Remove, 5000);
 		}
 
-		idleSmoke->PostEventMS(&EV_Activate, 0, NULL);
+		idleSmoke->PostEventMS(&EV_Activate, 0, (const idEntity *)nullptr);
 		return idleSmoke;
 	}
 
@@ -7797,8 +7798,8 @@ bool idGameLocal::DoOriginContainmentCheck(idEntity *ent)
 	{
 #ifdef _DEBUG
 		gameRenderWorld->DebugArrow(colorRed, ent->GetPhysics()->GetOrigin(), ent->GetPhysics()->GetAbsBounds().GetCenter(), 4, 60000);
-		gameRenderWorld->DrawTextA(va("%s", ent->GetName()), ent->GetPhysics()->GetAbsBounds().GetCenter() + idVec3(0, 0, 6), .12f, colorRed, mat3_default, 1, 60000);
-		gameRenderWorld->DrawTextA("origin is outside of brush.", ent->GetPhysics()->GetAbsBounds().GetCenter() + idVec3(0, 0, 2), .12f, colorRed, mat3_default, 1, 60000);
+		gameRenderWorld->DrawText(va("%s", ent->GetName()), ent->GetPhysics()->GetAbsBounds().GetCenter() + idVec3(0, 0, 6), .12f, colorRed, mat3_default, 1, 60000);
+		gameRenderWorld->DrawText("origin is outside of brush.", ent->GetPhysics()->GetAbsBounds().GetCenter() + idVec3(0, 0, 2), .12f, colorRed, mat3_default, 1, 60000);
 #endif
 		return false;
 	}
@@ -8231,7 +8232,7 @@ void idGameLocal::AddSubtitle( idStr speakerName, idStr text, int durationMS)
 	if (subCount > 1)
 	{
 		idSubtitleItem& otherItem = GetSubtitleSlot(1);
-		newSub.expirationTime = max(newSub.expirationTime, otherItem.expirationTime + fadeTimeMS);
+		newSub.expirationTime = Max(newSub.expirationTime, otherItem.expirationTime + fadeTimeMS);
 	}
 
 	//gameLocal.GetLocalPlayer()->hud->SetStateString(va("subtitle%d_text", availableIdx), text);

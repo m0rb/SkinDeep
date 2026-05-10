@@ -91,7 +91,7 @@ public:
 
 					idList( int newgranularity = 16 );
 					idList( const idList<type> &other );
-					~idList<type>( void );
+					~idList( void );
 
 	void			Clear( void );										// clear the list
 	int				Num( void ) const;									// returns number of elements in list
@@ -175,7 +175,7 @@ ID_INLINE idList<type>::idList( const idList<type> &other ) {
 
 /*
 ================
-idList<type>::~idList<type>
+idList<type>::~idList
 ================
 */
 template< class type >

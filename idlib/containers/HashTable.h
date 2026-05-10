@@ -142,7 +142,7 @@ ID_INLINE idHashTable<Type>::idHashTable( const idHashTable<Type> &map ) {
 
 /*
 ================
-idHashTable<Type>::~idHashTable<Type>
+idHashTable<Type>::~idHashTable
 ================
 */
 template< class Type >

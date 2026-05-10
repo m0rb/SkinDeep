@@ -1,3 +1,4 @@
+#include <float.h>
 #include "sys/platform.h"
 #include "gamesys/SysCvar.h"
 #include "physics/Physics_RigidBody.h"

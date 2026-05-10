@@ -28,6 +28,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/statvfs.h>
 #include <errno.h>
 #include <dirent.h>
 #include <unistd.h>
@@ -38,6 +39,8 @@ If you have questions concerning this license or the applicable additional terms
 #include <termios.h>
 #include <signal.h>
 #include <fcntl.h>
+
+#include <SDL.h>
 
 #include "sys/platform.h"
 #include "idlib/containers/StrList.h"
@@ -106,7 +109,7 @@ Posix_SetExit
 ================
 */
 void Posix_SetExit(int ret) {
-	set_exit = 0;
+	set_exit = ret;
 }
 
 /*
@@ -154,8 +157,8 @@ void Sys_Quit(void) {
 Sys_Mkdir
 ================
 */
-void Sys_Mkdir( const char *path ) {
-	mkdir(path, 0777);
+int Sys_Mkdir( const char *path ) {
+	return mkdir(path, 0777);
 }
 
 /*
@@ -309,12 +312,20 @@ ID_TIME_T Sys_FileTimeStamp(FILE * fp) {
 }
 
 char *Sys_GetClipboardData(void) {
-	Sys_Printf( "TODO: Sys_GetClipboardData\n" );
-	return NULL;
+	char *sdlText = SDL_GetClipboardText();
+	if ( !sdlText || sdlText[0] == '\0' ) {
+		SDL_free( sdlText );
+		return NULL;
+	}
+	size_t len = strlen( sdlText ) + 1;
+	char *ret = ( char * )Mem_Alloc( len );
+	memcpy( ret, sdlText, len );
+	SDL_free( sdlText );
+	return ret;
 }
 
 void Sys_SetClipboardData( const char *string ) {
-	Sys_Printf( "TODO: Sys_SetClipboardData\n" );
+	SDL_SetClipboardText( string );
 }
 
 /*
@@ -323,7 +334,7 @@ Sys_LockMemory
 ================
 */
 bool Sys_LockMemory( void *ptr, int bytes ) {
-	return true;
+	return mlock( ptr, bytes ) == 0;
 }
 
 /*
@@ -332,7 +343,7 @@ Sys_UnlockMemory
 ================
 */
 bool Sys_UnlockMemory( void *ptr, int bytes ) {
-	return true;
+	return munlock( ptr, bytes ) == 0;
 }
 
 /*
@@ -351,8 +362,12 @@ return in MegaBytes
 ===========
 */
 int Sys_GetDriveFreeSpace( const char *path ) {
-	common->DPrintf( "TODO: Sys_GetDriveFreeSpace\n" );
-	return 1000 * 1024;
+	struct statvfs fs;
+	if ( statvfs( path, &fs ) == -1 ) {
+		common->DPrintf( "Sys_GetDriveFreeSpace: statvfs '%s' failed: %s\n", path, strerror( errno ) );
+		return 1000 * 1024;
+	}
+	return ( int )( ( double )fs.f_bavail * ( double )fs.f_frsize / ( 1024.0 * 1024.0 ) );
 }
 
 /*
@@ -814,4 +829,46 @@ void Sys_Error(const char *error, ...) {
 	Sys_Printf( "\n" );
 
 	Posix_Exit( EXIT_FAILURE );
+}
+
+/*
+================
+Sys_Access
+================
+*/
+int Sys_Access( const char *path, SYS_ACCESS_MODE mode ) {
+	return access( path, mode );
+}
+
+/*
+================
+Sys_ShowWindow
+================
+*/
+extern void GLimp_ShowWindow( bool show );
+
+void Sys_ShowWindow( bool show ) {
+	GLimp_ShowWindow( show );
+}
+
+/*
+================
+Sys_IsWindowVisible
+================
+*/
+extern bool GLimp_IsWindowVisible();
+
+bool Sys_IsWindowVisible( void ) {
+	return GLimp_IsWindowVisible();
+}
+
+/*
+================
+Sys_IsWindowActive
+================
+*/
+extern bool GLimp_WindowActive();
+
+bool Sys_IsWindowActive( void ) {
+	return GLimp_WindowActive();
 }

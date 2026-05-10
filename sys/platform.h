@@ -147,7 +147,7 @@ If you have questions concerning this license or the applicable additional terms
 #define ID_GAME_API
 #endif
 
-#define ALIGN16( x )				x
+#define ALIGN16( x )				x __attribute__ ((aligned (16)))
 #define PACKED						__attribute__((packed))
 
 #define PATHSEPERATOR_STR			"/"

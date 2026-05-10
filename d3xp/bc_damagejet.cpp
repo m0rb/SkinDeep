@@ -253,7 +253,7 @@ idAngles idDamageJet::FindSafeInitialAngle()
 		float facingResult = DotProduct(dir, angleArray[i]);
 
 		//gameRenderWorld->DebugArrow(colorGreen, GetPhysics()->GetOrigin(), GetPhysics()->GetOrigin() + angleArray[i] * 64, 4, 9000000);
-		//gameRenderWorld->DrawTextA(idStr::Format("%.2f", facingResult), GetPhysics()->GetOrigin() + angleArray[i] * 64, .2f, colorGreen, gameLocal.GetLocalPlayer()->viewAxis, 1, 900000);
+		//gameRenderWorld->DrawText(idStr::Format("%.2f", facingResult), GetPhysics()->GetOrigin() + angleArray[i] * 64, .2f, colorGreen, gameLocal.GetLocalPlayer()->viewAxis, 1, 900000);
 
 		if (facingResult > bestResult)
 		{
@@ -296,7 +296,7 @@ void idDamageJet::Think(void)
         idEntity *entityList[MAX_GENTITIES];
 
 		
-        entityCount = gameLocal.EntitiesWithinRadius(this->GetPhysics()->GetOrigin(), max(enemyRange, range), entityList, MAX_GENTITIES);
+        entityCount = gameLocal.EntitiesWithinRadius(this->GetPhysics()->GetOrigin(), Max(enemyRange, range), entityList, MAX_GENTITIES);
 
         for (int i = 0; i < entityCount; i++)
         {

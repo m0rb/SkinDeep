@@ -63,7 +63,7 @@ private:
 
 class idStrPool {
 public:
-						idStrPool() { caseSensitive = true; }
+						idStrPool() : caseSensitive( true ), cleared( false ) { }
 
 	void				SetCaseSensitive( bool caseSensitive );
 
@@ -80,6 +80,7 @@ public:
 
 private:
 	bool				caseSensitive;
+	bool				cleared;
 	idList<idPoolStr *>	pool;
 	idHashIndex			poolHash;
 };
@@ -135,6 +136,10 @@ idStrPool::FreeString
 ID_INLINE void idStrPool::FreeString( const idPoolStr *poolStr ) {
 	int i, hash;
 
+	// pool was already cleared during static destruction; poolStr is dangling
+	if ( cleared ) {
+		return;
+	}
 	assert( poolStr->numUsers >= 1 );
 	assert( poolStr->pool == this );
 
@@ -194,6 +199,7 @@ ID_INLINE void idStrPool::Clear( void ) {
 	}
 	pool.DeleteContents( true );
 	poolHash.Free();
+	cleared = true;
 }
 
 /*

@@ -6,8 +6,8 @@ This is the source code to [Skin Deep](http://blendogames.com/skindeep), a first
 Skin Deep uses [idTech4](https://en.wikipedia.org/wiki/Id_Tech_4), otherwise known as the Doom 3 engine. It is based on the source port [dhewm3](https://dhewm3.org).
 
 ## Building
-- we used Visual Studio 2022 during development.
-- the code assumes it is in a folder named: `neo`
+- this branch builds on Linux and FreeBSD via cmake, gcc or clang (tested with gcc-14.2.0 and clang-20.1.2)
+- see [dhewm3 build docs](https://github.com/dhewm/dhewm3/tree/master?tab=readme-ov-file#compiling) for pointers
 
 ## License
 This source code is licensed under the [GNU General Public License](https://github.com/blendogames/skindeep/blob/master/LICENSE).

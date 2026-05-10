@@ -697,7 +697,7 @@ bool idFileSystemLocal::CreateOSPath( const char *OSPath ) {
 	}
 	idStr path( OSPath );
 	// form ancestory directory one folder at a time (mkdir doesn't do multiple folders)
-	for( int idx = 0; idx < path.Length() ; idx++) {
+	for( int idx = 1; idx < path.Length() ; idx++) {
 		if ( path[idx] == PATHSEPERATOR_CHAR ) {
 			idStr ancestorPath = path.Left(idx);
 

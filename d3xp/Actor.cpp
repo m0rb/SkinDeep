@@ -2143,7 +2143,7 @@ bool idActor::CheckFOV( const idVec3 &pos ) const
 			//	{
 			//		idVec3 midpoint = (GetEyePosition() + pos) / 2.0f;
 			//		gameRenderWorld->DebugArrow(colorRed, GetEyePosition(), pos, 2, 1000);
-			//		gameRenderWorld->DrawTextA("Ignoring enemy: beyond vertical height.", midpoint, 1.0f, colorRed, gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1, 1000);
+			//		gameRenderWorld->DrawText("Ignoring enemy: beyond vertical height.", midpoint, 1.0f, colorRed, gameLocal.GetLocalPlayer()->viewAngles.ToMat3(), 1, 1000);
 			//	}
 			//
 			//	return false;
@@ -3328,7 +3328,7 @@ void idActor::Damage(idEntity *inflictor, idEntity *attacker, const idVec3 &dir,
 
 	int	damage = damageDef->GetInt("damage") * damageScale;
 	int originalDamageAmount = damage;
-	damage = max(damage, GetDamageForLocation(damage, location)); //BC this was meant to handle items that bop the head to not inflict damage; but this isn't working and needs to be fixed
+	damage = Max(damage, GetDamageForLocation(damage, location)); //BC this was meant to handle items that bop the head to not inflict damage; but this isn't working and needs to be fixed
 
 	// inform the attacker that they hit someone
 	attacker->DamageFeedback( this, inflictor, damage );
